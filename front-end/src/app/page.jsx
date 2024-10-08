@@ -3,6 +3,7 @@
 import { Card } from "@/components/Card";
 import { CreateModal } from "@/components/CreateModel";
 import { BACKEND_ENDPOINT } from "@/contants/constants";
+import { Cart } from "@/svg/Cart";
 
 import { useEffect, useState } from "react";
 
@@ -27,7 +28,9 @@ export default function Home() {
   return (
     <div className="flex justify-center w-full p-6">
       <div className="max-w-[1200px]">
-        <div className="flex justify-end ">
+        <div className="flex justify-end gap-[20px]">
+          <Cart />
+          <button className="btn">User</button>
           <CreateModal setProducts={setProducts} />
         </div>
         <div className="grid grid-cols-3 gap-6 mt-6">
