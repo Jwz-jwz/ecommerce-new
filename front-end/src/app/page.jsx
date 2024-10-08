@@ -14,7 +14,7 @@ export default function Home() {
     try {
       const response = await fetch(`${BACKEND_ENDPOINT}/products`);
       const responseData = await response.json();
-      setProducts(responseData?.products);
+      setProducts(responseData);
     } catch (error) {
       console.log(error);
     }

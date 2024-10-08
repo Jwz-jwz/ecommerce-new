@@ -24,7 +24,7 @@ export const EditModal = ({
               type="text"
               placeholder="Type here"
               className="w-full input input-bordered"
-              value={selectedProduct?.productName}
+              value={selectedProduct?.name}
             />
             <input
               name="category"
@@ -32,7 +32,7 @@ export const EditModal = ({
               type="text"
               placeholder="Type here"
               className="w-full input input-bordered"
-              value={selectedProduct?.category}
+              value={selectedProduct?.description}
             />
             <input
               name="price"
