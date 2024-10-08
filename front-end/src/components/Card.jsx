@@ -1,5 +1,6 @@
 import { BACKEND_ENDPOINT } from "@/contants/constants";
 import { EditModal } from "./EditModal";
+import { Cart } from "@/svg/Cart";
 
 export const Card = ({
   product,
@@ -77,10 +78,13 @@ export const Card = ({
           <p>{description}</p>
           <p>{price}$</p>
         </div>
+
         <img src={image_url} alt="image" />
       </div>
       <div className="justify-end p-4 pt-0 card-actions">
-        <EditModal
+        <button className="btn">Add to cart</button>
+        <Cart />
+        {/* <EditModal
           product={product}
           setSelectedProduct={setSelectedProduct}
           selectedProduct={selectedProduct}
@@ -89,7 +93,7 @@ export const Card = ({
         />
         <button onClick={() => handleDelete(product?.id)} className="btn">
           Delete
-        </button>
+        </button> */}
       </div>
     </div>
   );
