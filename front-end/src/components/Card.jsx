@@ -7,7 +7,7 @@ export const Card = ({
   setSelectedProduct,
   setProducts,
 }) => {
-  const { productName, category, price } = product;
+  const { name, description, price, image_url } = product;
 
   const handleDelete = async (id) => {
     try {
@@ -72,11 +72,12 @@ export const Card = ({
         />
       </figure>
       <div class="card-body">
-        <h2 class="card-title">{productName}</h2>
+        <h2 class="card-title">{name}</h2>
         <div className="flex justify-between">
-          <p>{category}</p>
+          <p>{description}</p>
           <p>{price}$</p>
         </div>
+        <img src={image_url} alt="image" />
       </div>
       <div className="justify-end p-4 pt-0 card-actions">
         <EditModal

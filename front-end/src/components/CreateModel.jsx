@@ -18,17 +18,17 @@ export const CreateModal = ({ setProducts }) => {
 
       const response = await fetch(`${BACKEND_ENDPOINT}/product`, options);
       const data = await response.json();
-      console.log(data);
 
-      setProducts((prevProducts) => [...prevProducts, data.product]);
+      setProducts((prevProducts) => [...prevProducts, data]);
     } catch {
       console.log("error");
     }
 
     setProduct({
-      productName: "",
-      category: "",
+      name: "",
+      description: "",
       price: "",
+      image_url: "",
     });
     document.getElementById("my_modal_1").close();
   };
@@ -58,28 +58,36 @@ export const CreateModal = ({ setProducts }) => {
           <h3 className="text-lg font-bold">Create product</h3>
           <div className="flex flex-col gap-3 mt-4">
             <input
-              name="productName"
+              name="name"
               onChange={handleInputChange}
               type="text"
-              placeholder="Type here"
+              placeholder="Product name"
               className="w-full input input-bordered"
-              value={product?.productName}
+              value={product?.name}
             />
             <input
-              name="category"
+              name="description"
               onChange={handleInputChange}
               type="text"
-              placeholder="Type here"
+              placeholder="Description"
               className="w-full input input-bordered"
-              value={product?.category}
+              value={product?.description}
             />
             <input
               name="price"
               onChange={handleInputChange}
               type="text"
-              placeholder="Type here"
+              placeholder="Price"
               className="w-full input input-bordered"
               value={product?.price}
+            />
+            <input
+              name="image_url"
+              onChange={handleInputChange}
+              type=""
+              placeholder="URL"
+              className="w-full input input-bordered"
+              value={product?.image_url}
             />
           </div>
 
