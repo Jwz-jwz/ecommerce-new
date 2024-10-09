@@ -1,6 +1,7 @@
 import { BACKEND_ENDPOINT } from "@/contants/constants";
 import { EditModal } from "./EditModal";
 import { Cart } from "@/svg/Cart";
+import { AddToCart } from "./AddToCart";
 
 export const Card = ({
   product,
@@ -9,6 +10,8 @@ export const Card = ({
   setProducts,
 }) => {
   const { name, description, price, image_url } = product;
+
+  console.log(product);
 
   const handleDelete = async (id) => {
     try {
@@ -68,8 +71,9 @@ export const Card = ({
     <div class="card bg-base-100 w-96 shadow-xl">
       <figure>
         <img
-          src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
+          src={image_url}
           alt="Shoes"
+          // <img src={image_url} alt="image" />
         />
       </figure>
       <div class="card-body">
@@ -78,20 +82,20 @@ export const Card = ({
           <p>{description}</p>
           <p>{price}$</p>
         </div>
-
-        <img src={image_url} alt="image" />
       </div>
       <div className="justify-end p-4 pt-0 card-actions">
-        <button className="btn">Add to cart</button>
-        <Cart />
+        {/* <button className="btn">Add to cart</button> */}
+        <AddToCart />
+        <button className="btn">Veiw details</button>
+
         {/* <EditModal
           product={product}
           setSelectedProduct={setSelectedProduct}
           selectedProduct={selectedProduct}
           handleSubmit={handleSubmit}
           handleInputChange={handleInputChange}
-        />
-        <button onClick={() => handleDelete(product?.id)} className="btn">
+        /> */}
+        {/* <button onClick={() => handleDelete(product?.id)} className="btn">
           Delete
         </button> */}
       </div>

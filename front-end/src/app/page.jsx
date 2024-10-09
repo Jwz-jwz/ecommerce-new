@@ -28,15 +28,18 @@ export default function Home() {
   return (
     <div className="flex justify-center w-full p-6">
       <div className="max-w-[1200px]">
-        <div className="flex justify-end gap-[20px]">
-          <Cart />
+        <div className="flex justify-end gap-[23px] items-center">
+          <button>
+            <Cart />
+          </button>
           <button className="btn">User</button>
           <CreateModal setProducts={setProducts} />
         </div>
-        <div className="grid grid-cols-3 gap-6 mt-6">
+        <div className="grid grid-cols-3 gap-6 mt-10">
           {products?.map((product) => {
             return (
               <Card
+                key={product?.id}
                 product={product}
                 setProducts={setProducts}
                 setSelectedProduct={setSelectedProduct}
