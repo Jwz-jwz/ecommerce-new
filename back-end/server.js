@@ -62,26 +62,22 @@ app.post("/product", async (request, response) => {
       .json({ error: "Internal Server Error", details: error.message });
   }
 });
-app.post("/cart", async (request, response) => {
-  const { name, description, price, image_url } = request.body;
+app.post("/user", async (request, response) => {
+  const { name, email, address } = request.body;
+  console.log(request.body);
 
-  if (!name || !description || !price || !image_url) {
+  if (!name || !email || !address) {
     return response.status(400).json({ error: "All fields are required." });
-  }
-
-  if (isNaN(price) || price <= 0) {
-    return response
-      .status(400)
-      .json({ error: "Price must be a positive number." });
   }
 
   try {
     const sqlResponse = await sql`
-      INSERT INTO order_items ( order_id, product_id, quantity, price)
-      VALUES ( ${order_id}, ${product_id}, ${quantity}, ${price})
+      INSERT INTO customers ( name, email, address)
+      VALUES ( ${name}, ${email}, ${address})
       RETURNING *;`;
 
     response.json(sqlResponse);
+    console.log(sqlResponse);
   } catch (error) {
     console.error("Error adding product:", error);
     if (error.code === "23505") {
@@ -95,6 +91,39 @@ app.post("/cart", async (request, response) => {
       .json({ error: "Internal Server Error", details: error.message });
   }
 });
+// app.post("/cart", async (request, response) => {
+//   const { name, description, price, image_url } = request.body;
+
+//   if (!name || !description || !price || !image_url) {
+//     return response.status(400).json({ error: "All fields are required." });
+//   }
+
+//   if (isNaN(price) || price <= 0) {
+//     return response
+//       .status(400)
+//       .json({ error: "Price must be a positive number." });
+//   }
+
+//   try {
+//     const sqlResponse = await sql`
+//       INSERT INTO order_items ( order_id, product_id, quantity, price)
+//       VALUES ( ${order_id}, ${product_id}, ${quantity}, ${price})
+//       RETURNING *;`;
+
+//     response.json(sqlResponse);
+//   } catch (error) {
+//     console.error("Error adding product:", error);
+//     if (error.code === "23505") {
+//       // PostgreSQL unique violation code
+//       return response
+//         .status(409)
+//         .json({ error: "Product with this ID already exists." });
+//     }
+//     response
+//       .status(500)
+//       .json({ error: "Internal Server Error", details: error.message });
+//   }
+// });
 
 // app.delete("/product", async (request, response) => {
 //   const { id } = request.body;
