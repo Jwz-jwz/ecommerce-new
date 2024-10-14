@@ -11,8 +11,6 @@ export const Card = ({
 }) => {
   const { name, description, price, image_url } = product;
 
-  console.log(product);
-
   const handleDelete = async (id) => {
     try {
       const options = {

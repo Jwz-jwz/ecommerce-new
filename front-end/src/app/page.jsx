@@ -2,6 +2,7 @@
 
 import { Card } from "@/components/Card";
 import { CreateModal } from "@/components/CreateModel";
+import { User } from "@/components/User";
 import { BACKEND_ENDPOINT } from "@/contants/constants";
 import { Cart } from "@/svg/Cart";
 
@@ -32,7 +33,8 @@ export default function Home() {
           <button>
             <Cart />
           </button>
-          <button className="btn">User</button>
+          {/* <button className="btn">User</button> */}
+          <User />
           <CreateModal setProducts={setProducts} />
         </div>
         <div className="grid grid-cols-3 gap-6 mt-10">
