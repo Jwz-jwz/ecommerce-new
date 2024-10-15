@@ -1,16 +1,16 @@
 "use client";
 
+import { Cart } from "@/components/Cart";
 import { Card } from "@/components/Card";
 import { CreateModal } from "@/components/CreateModel";
-import { User } from "@/components/User";
 import { BACKEND_ENDPOINT } from "@/contants/constants";
-import { Cart } from "@/svg/Cart";
 
 import { useEffect, useState } from "react";
 
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState({});
+  const [cart, setCart] = useState([]);
 
   const fetchProducts = async () => {
     try {
@@ -21,6 +21,11 @@ export default function Home() {
       console.log(error);
     }
   };
+  const AddToCartButton = (id, name, description, price) => {
+    const cart = { id, name, description, price };
+
+    setCart((prevProduct) => [...prevProduct, cart]);
+  };
 
   useEffect(() => {
     fetchProducts();
@@ -30,11 +35,7 @@ export default function Home() {
     <div className="flex justify-center w-full p-6">
       <div className="max-w-[1200px]">
         <div className="flex justify-end gap-[23px] items-center">
-          <button>
-            <Cart />
-          </button>
-          {/* <button className="btn">User</button> */}
-          <User />
+          <Cart cart={cart} />
           <CreateModal setProducts={setProducts} />
         </div>
         <div className="grid grid-cols-3 gap-6 mt-10">
@@ -46,6 +47,7 @@ export default function Home() {
                 setProducts={setProducts}
                 setSelectedProduct={setSelectedProduct}
                 selectedProduct={selectedProduct}
+                AddToCartButton={AddToCartButton}
               />
             );
           })}

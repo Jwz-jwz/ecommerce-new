@@ -1,3 +1,4 @@
+import { BACKEND_ENDPOINT } from "@/contants/constants";
 import { useState } from "react";
 
 export const User = () => {
@@ -14,7 +15,6 @@ export const User = () => {
         },
         body: JSON.stringify(user),
       };
-      console.log(user);
 
       const response = await fetch(`${BACKEND_ENDPOINT}/user`, options);
       const data = await response.json();
