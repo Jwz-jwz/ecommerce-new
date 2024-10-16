@@ -1,15 +1,31 @@
 import { useState } from "react";
-import { Counter } from "./Counter";
 
-export const Cart = ({ cart }) => {
-  const [quantity, setQuantity] = useState(0);
-  const { id, name, description, price } = cart;
-
-  const handleDecrease = () => {
-    setQuantity((prevCount) => prevCount - 1);
+export const Cart = ({ cart, setCart }) => {
+  const handleDecrease = (id) => {
+    setCart((prevCardItems) => {
+      return prevCardItems.map((item) => {
+        if (item.id == id) {
+          return {
+            ...item,
+            count: item.count - 1,
+          };
+        }
+        return item;
+      });
+    });
   };
-  const handleIncrease = () => {
-    setQuantity((prevCount) => prevCount + 1);
+  const handleIncrease = (id) => {
+    setCart((prevCardItems) => {
+      return prevCardItems.map((item) => {
+        if (item.id == id) {
+          return {
+            ...item,
+            count: item.count + 1,
+          };
+        }
+        return item;
+      });
+    });
   };
 
   return (
@@ -29,18 +45,16 @@ export const Cart = ({ cart }) => {
                 <div className="flex justify-between items-center" key={index}>
                   <p>product id:{product.id}</p>
                   <p>name:{product.name}</p>
-                  {/* <div className="flex items-center justify-center gap-[5px]">
-                    quantity:
-                    <button onClick={handleDecrease}>-</button>
-                    <p>{quantity}</p>
-                    <button onClick={handleIncrease}>+</button>
-                  </div> */}
-                  <Counter
-                    quantity={quantity}
-                    handleDecrease={handleDecrease}
-                    handleIncrease={handleIncrease}
-                  />
-                  <p>price:$</p>
+                  <div className="flex items-center justify-center gap-[5px]">
+                    <button onClick={() => handleDecrease(product.id)}>
+                      -
+                    </button>
+                    <p>{product.count}</p>
+                    <button onClick={() => handleIncrease(product.id)}>
+                      +
+                    </button>
+                  </div>
+                  <p>{product.count}</p>
                 </div>
               );
             })}

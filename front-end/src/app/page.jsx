@@ -21,10 +21,26 @@ export default function Home() {
       console.log(error);
     }
   };
-  const AddToCartButton = (id, name, description, price) => {
-    const cart = { id, name, description, price };
 
-    setCart((prevProduct) => [...prevProduct, cart]);
+  const AddToCartButton = (id, name, description, price) => {
+    const cart = { id, name, description, price, count: 1 };
+
+    setCart((prevItems) => {
+      const isExists = prevItems.find((item) => item.id === id);
+      if (isExists) {
+        return prevItems.map((item) => {
+          if (item.id === id) {
+            return {
+              ...item,
+              count: item.count + 1,
+            };
+          }
+          return item;
+        });
+      }
+
+      return [...prevItems, cart];
+    });
   };
 
   useEffect(() => {
@@ -35,7 +51,7 @@ export default function Home() {
     <div className="flex justify-center w-full p-6">
       <div className="max-w-[1200px]">
         <div className="flex justify-end gap-[23px] items-center">
-          <Cart cart={cart} />
+          <Cart cart={cart} setCart={setCart} />
           <CreateModal setProducts={setProducts} />
         </div>
         <div className="grid grid-cols-3 gap-6 mt-10">
