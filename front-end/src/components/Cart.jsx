@@ -1,6 +1,37 @@
 import { useState } from "react";
+import { User } from "./User";
 
 export const Cart = ({ cart, setCart }) => {
+  console.log(cart);
+
+  const handleCheckOut = async (event) => {
+    try {
+      event.preventDefault();
+      const options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+        body: JSON.stringify(cart),
+      };
+
+      const response = await fetch(`${BACKEND_ENDPOINT}/product`, options);
+      const data = await response.json();
+
+      setProducts((prevProducts) => [...prevProducts, ...data]);
+    } catch {
+      console.log("error");
+    }
+
+    setProduct({
+      name: "",
+      description: "",
+      price: "",
+      image_url: "",
+    });
+    document.getElementById("my_modal_1").close();
+  };
   const handleDecrease = (id) => {
     setCart((prevCardItems) => {
       return prevCardItems.map((item) => {
@@ -60,8 +91,9 @@ export const Cart = ({ cart, setCart }) => {
             })}
           </div>
           <div className="modal-action">
-            <form method="dialog">
+            <form className="flex  gap-[10px]" method="dialog">
               <button className="btn">Close</button>
+              <User />
             </form>
           </div>
         </div>
