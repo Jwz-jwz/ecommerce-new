@@ -64,7 +64,7 @@ app.post("/product", async (request, response) => {
 });
 app.post("/user", async (request, response) => {
   const { name, email, address } = request.body;
-  console.log(request.body);
+  console.log("request.body", request.body);
 
   if (!name || !email || !address) {
     return response.status(400).json({ error: "All fields are required." });
@@ -77,9 +77,9 @@ app.post("/user", async (request, response) => {
       RETURNING *;`;
 
     response.json(sqlResponse);
-    console.log(sqlResponse);
+    console.log("sqlResponse", sqlResponse);
   } catch (error) {
-    console.error("Error adding product:", error);
+    console.error("Error create customer:", error);
     if (error.code === "23505") {
       // PostgreSQL unique violation code
       return response
