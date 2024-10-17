@@ -4,7 +4,7 @@ import { useState } from "react";
 export const User = () => {
   const [user, setUser] = useState({});
 
-  const handleUserSubmit = async (event) => {
+  const handleUserConfirm = async (event) => {
     try {
       event.preventDefault();
       const options = {
@@ -19,15 +19,10 @@ export const User = () => {
       const response = await fetch(`${BACKEND_ENDPOINT}/user`, options);
       const data = await response.json();
       console.log(data);
-    } catch {
-      console.log("error");
+    } catch (error) {
+      console.log("error during create customer", error);
     }
 
-    // setUser({
-    //   name: "",
-    //   email: "",
-    //   address: "",
-    // });
     document.getElementById("my_modal_3").close();
   };
 
@@ -35,9 +30,9 @@ export const User = () => {
     const name = event.target.name;
     const value = event.target.value;
 
-    setUser((prevProduct) => {
+    setUser((prevUser) => {
       return {
-        ...prevProduct,
+        ...prevUser,
         [name]: value,
       };
     });
@@ -48,7 +43,7 @@ export const User = () => {
         className="btn"
         onClick={() => document.getElementById("my_modal_3").showModal()}
       >
-        User
+        Continue
       </button>
       <dialog id="my_modal_3" className="modal">
         <div className="modal-box">
@@ -77,8 +72,8 @@ export const User = () => {
             />
           </div>
 
-          <button className="mt-4 btn" onClick={handleUserSubmit}>
-            Sign-up
+          <button className="mt-4 btn" onClick={handleUserConfirm}>
+            Confirm
           </button>
         </div>
       </dialog>
