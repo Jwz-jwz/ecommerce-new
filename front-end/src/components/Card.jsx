@@ -1,3 +1,5 @@
+import { BACKEND_ENDPOINT } from "@/contants/constants";
+
 export const Card = ({
   AddToCartButton,
   product,
@@ -6,6 +8,31 @@ export const Card = ({
   setProducts,
 }) => {
   const { id, name, description, price, image_url } = product;
+  const handleDeleteCard = async (id) => {
+    try {
+      const options = {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+        body: JSON.stringify({ id: id }),
+      };
+      const response = await fetch(`${BACKEND_ENDPOINT}/product`, options);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setProducts((prevProducts) =>
+        prevProducts.filter((product) => data[0]?.id !== product?.id)
+      );
+    } catch (error) {
+      console.log("error:", error);
+    }
+    // document.getElementById("my_modal_2").close();
+  };
 
   return (
     <div class="card bg-base-100 w-96 shadow-xl">
@@ -34,6 +61,9 @@ export const Card = ({
           Add to cart
         </button>
         <button className="btn">Veiw details</button>
+        <button onClick={() => handleDeleteCard(product?.id)} className="btn">
+          Delete
+        </button>
       </div>
     </div>
   );
