@@ -1,7 +1,7 @@
 import { BACKEND_ENDPOINT } from "@/contants/constants";
 import { useState } from "react";
 
-export const User = () => {
+export const User = ({ totalSumOfCart }) => {
   const [user, setUser] = useState({});
 
   const handleUserConfirm = async (event) => {
@@ -18,7 +18,6 @@ export const User = () => {
 
       const response = await fetch(`${BACKEND_ENDPOINT}/user`, options);
       const data = await response.json();
-      console.log(data);
     } catch (error) {
       console.log("error during create customer", error);
     }
@@ -70,6 +69,7 @@ export const User = () => {
               placeholder="address"
               className="w-full input input-bordered"
             />
+            <p>Total price:{totalSumOfCart}</p>
           </div>
 
           <button className="mt-4 btn" onClick={handleUserConfirm}>

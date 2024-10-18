@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { User } from "./User";
 
 export const Cart = ({ cart, setCart }) => {
-  console.log(cart);
+  const [totalSumOfCart, setTotalSumOfCart] = useState(0);
 
   const handleCheckOut = async (event) => {
     try {
@@ -59,6 +59,17 @@ export const Cart = ({ cart, setCart }) => {
     });
   };
 
+  const calculateTotal = () => {
+    const total = cart.reduce((acc, current) => {
+      return acc + current.price * current.count;
+    }, 0);
+    setTotalSumOfCart(total);
+  };
+
+  useEffect(() => {
+    calculateTotal();
+  }, [cart]);
+
   return (
     <div>
       <button
@@ -68,7 +79,7 @@ export const Cart = ({ cart, setCart }) => {
         Cart {cart.length}
       </button>
       <dialog id="my_modal_2" className="modal">
-        <div className="modal-box">
+        <div className="modal-box flex flex-col gap-[20px]">
           <h3 className="font-bold text-lg">Order information!</h3>
           <div className="flex flex-col gap-3 mt-4">
             {cart?.map((product, index) => {
@@ -85,15 +96,16 @@ export const Cart = ({ cart, setCart }) => {
                       +
                     </button>
                   </div>
-                  <p>{product.count}</p>
+                  <p>{product.count * product.price}$</p>
                 </div>
               );
             })}
           </div>
+          <p>Total price:{totalSumOfCart}$</p>
           <div className="modal-action">
             <form className="flex  gap-[10px]" method="dialog">
               <button className="btn">Close</button>
-              <User />
+              <User totalSumOfCart={totalSumOfCart} />
             </form>
           </div>
         </div>
