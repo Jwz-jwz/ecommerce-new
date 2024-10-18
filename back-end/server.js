@@ -63,21 +63,33 @@ app.post("/product", async (request, response) => {
   }
 });
 app.post("/user", async (request, response) => {
-  const { name, email, address } = request.body;
-  console.log("request.body", request.body);
+  const { name, email, address, totalSumOfCart } = request.body;
+  console.log("body resuest ni:", request.body);
 
-  if (!name || !email || !address) {
+  if (!name || !email || !address || !totalSumOfCart) {
     return response.status(400).json({ error: "All fields are required." });
   }
 
   try {
-    const sqlResponse = await sql`
+    const sqlCustomersResponse = await sql`
       INSERT INTO customers ( name, email, address)
       VALUES ( ${name}, ${email}, ${address})
       RETURNING *;`;
 
-    response.json(sqlResponse);
-    console.log("sqlResponse", sqlResponse);
+    // response.json(sqlResponse);
+
+    const customerId = sqlCustomersResponse[0].id;
+    const sqlOrdersResponse = await sql`
+    INSERT INTO orders ( customer_id, order_date, total_amount)
+    VALUES ( ${customerId}, ${CURRENT_TIMESTAMP} ${totalSumOfCart})
+    RETURNING *;`;
+    console.log("orders-n response:", sqlOrdersResponse);
+
+    const orderId = sqlOrdersResponse[0].id;
+    const sqlOrderItemsResponse = await sql`
+    INSERT INTO order_items ( order_id, order_date, total_amount)
+    VALUES ( ${customerId}, ${CURRENT_TIMESTAMP} ${totalSumOfCart})
+    RETURNING *;`;
   } catch (error) {
     console.error("Error create customer:", error);
     if (error.code === "23505") {
@@ -89,6 +101,20 @@ app.post("/user", async (request, response) => {
     response
       .status(500)
       .json({ error: "Internal Server Error", details: error.message });
+  }
+});
+
+app.delete("/product", async (request, response) => {
+  const { id } = request.body;
+
+  try {
+    const sqlResponse = await sql`
+      DELETE FROM products WHERE id=${id}
+      RETURNING *;`;
+
+    response.json(sqlResponse);
+  } catch (error) {
+    console.error("Error create customer:", error);
   }
 });
 // app.post("/cart", async (request, response) => {
