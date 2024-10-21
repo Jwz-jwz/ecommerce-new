@@ -14,11 +14,6 @@ app.use(cors());
 
 const sql = neon(`${process.env.DATABASE_URL}`);
 
-// app.get("/", async (request, response) => {
-//   const sqlREsponse = await sql`SELECT * FROM products`;
-//   response.json({ sqlREsponse });
-// });
-
 app.get("/products", async (request, response) => {
   try {
     const sqlResponse = await sql`SELECT * FROM products`;
@@ -62,45 +57,29 @@ app.post("/product", async (request, response) => {
       .json({ error: "Internal Server Error", details: error.message });
   }
 });
-app.post("/user", async (request, response) => {
-  const { name, email, address, totalSumOfCart } = request.body;
-  console.log("body resuest ni:", request.body);
 
-  if (!name || !email || !address || !totalSumOfCart) {
-    return response.status(400).json({ error: "All fields are required." });
-  }
+app.post("/orders", async (request, response) => {
+  const { cart } = request.body;
 
   try {
-    const sqlCustomersResponse = await sql`
-      INSERT INTO customers ( name, email, address)
-      VALUES ( ${name}, ${email}, ${address})
-      RETURNING *;`;
-
-    // response.json(sqlResponse);
-
-    const customerId = sqlCustomersResponse[0].id;
+    const customer_id = 9;
+    const totalSumOfCart = 100;
     const sqlOrdersResponse = await sql`
     INSERT INTO orders ( customer_id, order_date, total_amount)
-    VALUES ( ${customerId}, ${CURRENT_TIMESTAMP} ${totalSumOfCart})
+    VALUES ( ${customer_id}, CURRENT_TIMESTAMP, ${totalSumOfCart})
     RETURNING *;`;
     console.log("orders-n response:", sqlOrdersResponse);
-
-    const orderId = sqlOrdersResponse[0].id;
+    const order_id = sqlOrdersResponse[0].id;
     const sqlOrderItemsResponse = await sql`
-    INSERT INTO order_items ( order_id, order_date, total_amount)
-    VALUES ( ${customerId}, ${CURRENT_TIMESTAMP} ${totalSumOfCart})
+    INSERT INTO order_items ( order_id, product_id, quantity, price)
+    VALUES ${cart.map((item) => {
+      return `( ${order_id}, ${item.id}, ${item.count}, ${item.price})`;
+    })},
     RETURNING *;`;
+    console.log("order_items-n response:", sqlOrderItemsResponse);
+    response.json(sqlOrdersResponse);
   } catch (error) {
     console.error("Error create customer:", error);
-    if (error.code === "23505") {
-      // PostgreSQL unique violation code
-      return response
-        .status(409)
-        .json({ error: "Product with this ID already exists." });
-    }
-    response
-      .status(500)
-      .json({ error: "Internal Server Error", details: error.message });
   }
 });
 
@@ -160,51 +139,6 @@ app.delete("/product", async (request, response) => {
 //     console.log("Error");
 //   }
 // });
-
-app.put("/product", (request, response) => {
-  const { id, productName, category, price } = request.body;
-
-  fs.readFile("./data/products.json", "utf-8", (readError, data) => {
-    if (readError) {
-      response.json({
-        success: false,
-        error: error,
-      });
-    }
-
-    let dbData = data ? JSON.parse(data) : [];
-
-    const editedData = dbData.map((data) => {
-      if (data?.id === id) {
-        return {
-          id,
-          productName,
-          category,
-          price,
-        };
-      }
-      return data;
-    });
-
-    fs.writeFile(
-      "./data/products.json",
-      JSON.stringify(editedData),
-      (error) => {
-        if (error) {
-          response.json({
-            success: false,
-            error: error,
-          });
-        } else {
-          response.json({
-            success: true,
-            products: editedData,
-          });
-        }
-      }
-    );
-  });
-});
 
 app.listen(port, () => {
   console.log(`Server ajillaj bn http://localhost:${port}`);
