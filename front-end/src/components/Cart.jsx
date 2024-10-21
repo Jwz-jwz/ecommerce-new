@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { User } from "./User";
+import { BACKEND_ENDPOINT } from "@/contants/constants";
 
 export const Cart = ({ cart, setCart }) => {
   const [totalSumOfCart, setTotalSumOfCart] = useState(0);
@@ -16,21 +17,14 @@ export const Cart = ({ cart, setCart }) => {
         body: JSON.stringify(cart),
       };
 
-      const response = await fetch(`${BACKEND_ENDPOINT}/product`, options);
+      const response = await fetch(`${BACKEND_ENDPOINT}/orders`, options);
       const data = await response.json();
-
-      setProducts((prevProducts) => [...prevProducts, ...data]);
+      console.log(data);
     } catch {
       console.log("error");
     }
 
-    setProduct({
-      name: "",
-      description: "",
-      price: "",
-      image_url: "",
-    });
-    document.getElementById("my_modal_1").close();
+    document.getElementById("my_modal_2").close();
   };
   const handleDecrease = (id) => {
     setCart((prevCardItems) => {
@@ -105,7 +99,10 @@ export const Cart = ({ cart, setCart }) => {
           <div className="modal-action">
             <form className="flex  gap-[10px]" method="dialog">
               <button className="btn">Close</button>
-              <User totalSumOfCart={totalSumOfCart} />
+              <button onClick={handleCheckOut} className="btn">
+                Check-out
+              </button>
+              {/* <User cart={cart} totalSumOfCart={totalSumOfCart} /> */}
             </form>
           </div>
         </div>
