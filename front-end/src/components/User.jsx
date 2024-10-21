@@ -1,7 +1,7 @@
 import { BACKEND_ENDPOINT } from "@/contants/constants";
 import { useState } from "react";
 
-export const User = ({ totalSumOfCart }) => {
+export const User = ({ totalSumOfCart, cart }) => {
   const [user, setUser] = useState({});
 
   const handleUserConfirm = async (event) => {
@@ -18,6 +18,7 @@ export const User = ({ totalSumOfCart }) => {
 
       const response = await fetch(`${BACKEND_ENDPOINT}/user`, options);
       const data = await response.json();
+      console.log("data ", data);
     } catch (error) {
       console.log("error during create customer", error);
     }
